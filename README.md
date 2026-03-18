@@ -1,0 +1,2 @@
+# Zaalima-Development-Project-3-ealthcare---Patient-Readmission-Resource-Optimization-Cloud-Native-
+MediFlow Cloud is a cloud-native healthcare analytics project using AWS S3, Glue, and Athena to analyze patient data. It tracks readmissions, Average Length of Stay (ALOS), and resource utilization. The solution enables cost-efficient, serverless data processing and provides insights through interactive dashboards.
