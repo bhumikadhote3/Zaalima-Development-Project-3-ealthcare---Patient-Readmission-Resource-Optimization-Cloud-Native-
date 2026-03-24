@@ -1,0 +1,82 @@
+-- ============================================
+-- PROJECT: Healthcare Data Lake Analysis
+-- TOOL: Amazon Athena (SQL)
+-- ============================================
+
+
+-- ============================================
+-- 1. DATA EXPLORATION
+-- ============================================
+
+-- View sample data
+SELECT * 
+FROM raw 
+LIMIT 10;
+
+-- Check missing values in weight column
+SELECT *
+FROM raw
+WHERE weight = '?';
+
+
+
+-- ============================================
+-- 2. DATA CLEANING
+-- ============================================
+
+-- Replace '?' with NULL for weight column
+SELECT 
+    encounter_id,
+    patient_nbr,
+    race,
+    gender,
+    age,
+    CASE 
+        WHEN weight = '?' THEN NULL 
+        ELSE weight 
+    END AS weight_clean
+FROM raw;
+
+-- Create cleaned table
+CREATE TABLE clean_data AS
+SELECT 
+    encounter_id,
+    patient_nbr,
+    race,
+    gender,
+    age,
+    NULLIF(weight, '?') AS weight,
+    admission_type_id,
+    time_in_hospital,
+    num_lab_procedures,
+    num_medications,
+    number_diagnoses,
+    diabetesmed,
+    readmitted
+FROM raw;
+
+
+
+-- ============================================
+-- 3. DATA ANALYSIS
+-- ============================================
+
+-- Total unique patients
+SELECT COUNT(DISTINCT patient_nbr) AS total_patients
+FROM clean_data;
+
+-- Readmission distribution
+SELECT readmitted, COUNT(*) AS total_count
+FROM clean_data
+GROUP BY readmitted;
+
+-- Gender distribution
+SELECT gender, COUNT(*) AS total_count
+FROM clean_data
+GROUP BY gender;
+
+-- Age group distribution
+SELECT age, COUNT(*) AS total_count
+FROM clean_data
+GROUP BY age
+ORDER BY age;
